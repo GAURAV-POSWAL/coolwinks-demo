@@ -11,5 +11,5 @@ interface CoolApiService {
     }
 
     @GET("posts")
-    fun getUsersMessageData(): Call<CoolApiResponse>
+    fun getUsersMessageData(): Call<List<CoolApiResponse>>
 }

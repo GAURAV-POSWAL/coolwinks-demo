@@ -2,18 +2,18 @@ package com.example.coolwinksapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.coolwinksapp.model.CoolApiViewDataResponse
 import com.example.coolwinksapp.model.CoolDataRepository
+import com.example.coolwinksapp.model.CoolViewDataResponse
 import javax.inject.Inject
 
 class CoolViewModel @Inject constructor(private val coolRepo: CoolDataRepository) :
     ViewModel() {
 
-    private var usersData: CoolApiViewDataResponse? = null
+    private var usersData: List<CoolViewDataResponse>? = null
 
-    fun getUsersData(): LiveData<CoolApiViewDataResponse> = coolRepo.getUserData()
+    fun getUsersData(): LiveData<List<CoolViewDataResponse>> = coolRepo.getUserData()
 
-    fun setUsersData(usersData: CoolApiViewDataResponse?) {
+    fun setUsersData(usersData: List<CoolViewDataResponse>?) {
         this.usersData = usersData
     }
 

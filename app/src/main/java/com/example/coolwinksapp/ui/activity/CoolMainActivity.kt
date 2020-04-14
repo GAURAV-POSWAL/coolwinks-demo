@@ -1,6 +1,7 @@
 package com.example.coolwinksapp.ui.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coolwinksapp.R
 import com.example.coolwinksapp.base.MyApplication
-import com.example.coolwinksapp.model.CoolApiViewDataResponse
+import com.example.coolwinksapp.model.CoolViewDataResponse
 import com.example.coolwinksapp.utils.Utils
 import com.example.coolwinksapp.viewmodel.CoolViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,7 +31,6 @@ class CoolMainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         coolViewModel =
             ViewModelProvider(this, viewModelFactory)[CoolViewModel::class.java]
         setupRecyclerView()
@@ -55,8 +55,9 @@ class CoolMainActivity : AppCompatActivity() {
     private fun getCoolApiData() {
         if (Utils.isOnline(this))
             coolViewModel.getUsersData().observe(
-                this, Observer<CoolApiViewDataResponse> {
+                this, Observer<List<CoolViewDataResponse>> {
                     showLoader(false)
+                    Toast.makeText(this, "List size is ${it.size}", Toast.LENGTH_SHORT).show()
                     if (it != null) {
                         coolViewModel.setUsersData(it)
 //                        populateNewsList(it.articles)
@@ -70,17 +71,16 @@ class CoolMainActivity : AppCompatActivity() {
 //    private fun populateNewsList(newData: ArrayList<Article>) {
 //        rvUsersMessages.visibility = View.VISIBLE
 //        recyclerAdapter.updateList(newData)
-//    }
+}
 
-    /**
-     * this start animation when we show the loader
-     * clear the animation when we don't show the loader
-     */
-    private fun showLoader(flag: Boolean) {
-        if (flag) {
+/**
+ * this start animation when we show the loader
+ * clear the animation when we don't show the loader
+ */
+private fun showLoader(flag: Boolean) {
+    if (flag) {
 
-        } else {
+    } else {
 
-        }
     }
 }

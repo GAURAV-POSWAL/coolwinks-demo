@@ -2,6 +2,7 @@ package com.example.coolwinksapp.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.coolwinksapp.mapper.UserDataItemMapper
 import com.example.coolwinksapp.network.CoolApiService
 import retrofit2.Call
 import retrofit2.Callback
@@ -9,26 +10,29 @@ import retrofit2.Response
 import javax.inject.Inject
 
 
-class CoolDataRepository @Inject constructor(private val coolApiService: CoolApiService) {
+class CoolDataRepository @Inject constructor(
+    private val coolApiService: CoolApiService,
+    private val mapper: UserDataItemMapper
+) {
 
     // hit the apis here
-    fun getUserData(): LiveData<CoolApiViewDataResponse> {
+    fun getUserData(): LiveData<List<CoolViewDataResponse>> {
 
-        val usersMessageData: MutableLiveData<CoolApiViewDataResponse> = MutableLiveData()
+        val usersMessageData: MutableLiveData<List<CoolViewDataResponse>> = MutableLiveData()
 
-        coolApiService.getUsersMessageData().enqueue(object : Callback<CoolApiResponse> {
+        coolApiService.getUsersMessageData().enqueue(object : Callback<List<CoolApiResponse>> {
             override fun onResponse(
-                call: Call<CoolApiResponse>,
-                response: Response<CoolApiResponse?>
+                call: Call<List<CoolApiResponse>>,
+                response: Response<List<CoolApiResponse>?>
             ) {
                 if (response.isSuccessful) {
-//                    usersMessageData.value = response.body()
+                    usersMessageData.value = mapper.map(response.body())
                 } else {
                     usersMessageData.value = null
                 }
             }
 
-            override fun onFailure(call: Call<CoolApiResponse>, t: Throwable?) {
+            override fun onFailure(call: Call<List<CoolApiResponse>>, t: Throwable?) {
                 usersMessageData.value = null
             }
         })
