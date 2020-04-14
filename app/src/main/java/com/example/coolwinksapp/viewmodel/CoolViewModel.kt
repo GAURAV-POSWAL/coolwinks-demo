@@ -11,11 +11,12 @@ class CoolViewModel @Inject constructor(private val coolRepo: CoolDataRepository
 
     private var usersData: List<CoolViewDataResponse>? = null
 
-    fun getUsersData(): LiveData<List<CoolViewDataResponse>> = coolRepo.getUserData()
+    fun getUsersApiData(): LiveData<List<CoolViewDataResponse>> = coolRepo.getUserData()
 
     fun setUsersData(usersData: List<CoolViewDataResponse>?) {
         this.usersData = usersData
     }
 
+    fun getUsersData() = usersData
 }
 

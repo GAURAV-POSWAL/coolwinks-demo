@@ -1,6 +1,7 @@
 package com.example.coolwinksapp.ui.activity
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coolwinksapp.R
 import com.example.coolwinksapp.base.MyApplication
 import com.example.coolwinksapp.model.CoolViewDataResponse
+import com.example.coolwinksapp.ui.adapter.RecyclerAdapter
 import com.example.coolwinksapp.utils.Utils
 import com.example.coolwinksapp.viewmodel.CoolViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,7 +26,7 @@ class CoolMainActivity : AppCompatActivity() {
      */
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-//    private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var recyclerAdapter: RecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as MyApplication).appComponent.inject(this)
@@ -35,16 +37,26 @@ class CoolMainActivity : AppCompatActivity() {
             ViewModelProvider(this, viewModelFactory)[CoolViewModel::class.java]
         setupRecyclerView()
 
-        showLoader(true)
-        getCoolApiData()
+        // Handle api call on configuration changes.
+        with(coolViewModel.getUsersData()) {
+            if (this.isNullOrEmpty()) {
+                showLoader(true)
+                getCoolApiData()
+            } else {
+                coolViewModel.setUsersData(this)
+                populateNewsList(this)
+            }
+        }
+
+
     }
 
     private fun setupRecyclerView() {
 
         val linearLayoutManager = LinearLayoutManager(this)
         rvUsersMessages.layoutManager = linearLayoutManager
-//        recyclerAdapter = RecyclerAdapter(this)
-//        rvUsersMessages.adapter = recyclerAdapter
+        recyclerAdapter = RecyclerAdapter(this)
+        rvUsersMessages.adapter = recyclerAdapter
         // for line separation between items
         val dividerItemDecoration =
             DividerItemDecoration(rvUsersMessages.context, linearLayoutManager.orientation)
@@ -54,13 +66,12 @@ class CoolMainActivity : AppCompatActivity() {
 
     private fun getCoolApiData() {
         if (Utils.isOnline(this))
-            coolViewModel.getUsersData().observe(
+            coolViewModel.getUsersApiData().observe(
                 this, Observer<List<CoolViewDataResponse>> {
                     showLoader(false)
                     Toast.makeText(this, "List size is ${it.size}", Toast.LENGTH_SHORT).show()
                     if (it != null) {
-                        coolViewModel.setUsersData(it)
-//                        populateNewsList(it.articles)
+                        showUserData(it)
                     }
 //                    else showErrorScreen(true)
                 })
@@ -68,19 +79,33 @@ class CoolMainActivity : AppCompatActivity() {
 
     }
 
-//    private fun populateNewsList(newData: ArrayList<Article>) {
-//        rvUsersMessages.visibility = View.VISIBLE
-//        recyclerAdapter.updateList(newData)
-}
+    private fun showUserData(it: List<CoolViewDataResponse>?) {
+        coolViewModel.setUsersData(it)
+        populateNewsList(it)
+    }
 
-/**
- * this start animation when we show the loader
- * clear the animation when we don't show the loader
- */
-private fun showLoader(flag: Boolean) {
-    if (flag) {
+    private fun populateNewsList(dataList: List<CoolViewDataResponse>?) {
+        dataList?.let {
+            if (it.isNotEmpty()) {
+                rvUsersMessages.visibility = View.VISIBLE
+                tvNoData.visibility = View.GONE
+                recyclerAdapter.updateList(it)
+            } else {
+                rvUsersMessages.visibility = View.GONE
+                tvNoData.visibility = View.VISIBLE
+            }
+        }
+    }
 
-    } else {
-
+    /**
+     * this start animation when we show the loader
+     * clear the animation when we don't show the loader
+     */
+    private fun showLoader(flag: Boolean) {
+        if (flag) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
     }
 }
