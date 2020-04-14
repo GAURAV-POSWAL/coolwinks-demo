@@ -1,6 +1,6 @@
 package com.example.coolwinksapp.di
 
-import com.example.coolwinksapp.ui.CWMainActivity
+import com.example.coolwinksapp.ui.activity.CoolMainActivity
 import dagger.Component
 import javax.inject.Singleton
 
@@ -8,6 +8,6 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [NetworkModule::class, ViewModelModule::class])
 interface AppComponent {
-    fun inject(activity: CWMainActivity)
+    fun inject(activity: CoolMainActivity)
 
 }
