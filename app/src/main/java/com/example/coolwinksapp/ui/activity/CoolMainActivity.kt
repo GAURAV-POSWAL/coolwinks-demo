@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.example.coolwinksapp.R
 import com.example.coolwinksapp.ui.adapter.ViewPagerAdapter
 import com.example.coolwinksapp.ui.fragment.CoolMainFragment
+import com.example.coolwinksapp.ui.fragment.UsedTechAndLibraryFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class CoolMainActivity : AppCompatActivity() {
@@ -17,7 +18,6 @@ class CoolMainActivity : AppCompatActivity() {
         setupViewPager()
         viewPagerMain.offscreenPageLimit = 2
         tabLayout.setupWithViewPager(viewPagerMain)
-
     }
 
     /**
@@ -30,11 +30,12 @@ class CoolMainActivity : AppCompatActivity() {
             getString(R.string.tab_1)
         )
         adapter.addFragment(
+            // Under Development
             Fragment(),
             getString(R.string.tab_2)
         )
         adapter.addFragment(
-            Fragment(),
+            UsedTechAndLibraryFragment.getInstance("TAB_3"),
             getString(R.string.tab_3)
         )
 

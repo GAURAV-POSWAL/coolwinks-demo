@@ -4,4 +4,23 @@
     <string name="tab_1">TAB 1</string>
     <string name="tab_2">TAB 2</string>
     <string name="tab_3">TAB 3</string>
+    <string name="technologies_used">Technologies Used</string>
+
+    <string-array name="technologyList">
+        <item> <b>=> Technologies and Libraries used.</b></item>
+        <item>• MVVM architecture</item>
+        <item>• ViewModel</item>
+        <item>• Dagger</item>
+        <item>• Androidx</item>
+        <item>• ViewPager</item>
+        <item>• Retrofit</item>
+        <item>• Kotlin</item>
+        <item>• AppCompat</item>
+        <item>• GSON</item>
+        <item>• LiveData</item>
+        <item>• Material Design</item>
+        <item>• Layout</item>
+        <item>• Fragment</item>
+
+    </string-array>
 </resources>
