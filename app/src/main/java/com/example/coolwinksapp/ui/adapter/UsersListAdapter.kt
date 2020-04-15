@@ -1,6 +1,7 @@
 package com.example.coolwinksapp.ui.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +9,13 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coolwinksapp.R
 import com.example.coolwinksapp.model.CoolViewDataResponse
+import com.example.coolwinksapp.ui.activity.UserDetailsActivity
+import com.example.coolwinksapp.ui.activity.UserDetailsActivity.Companion.MESSAGES_DATA
 import kotlinx.android.synthetic.main.row_item_user.view.*
 
 
-class RecyclerAdapter(private val mContext: Context) :
-    RecyclerView.Adapter<RecyclerAdapter.UserViewHolder>() {
+class UsersListAdapter(private val mContext: Context) :
+    RecyclerView.Adapter<UsersListAdapter.UserViewHolder>() {
 
     private var usersDataList = listOf<CoolViewDataResponse>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
@@ -42,7 +45,9 @@ class RecyclerAdapter(private val mContext: Context) :
         }
 
         override fun onClick(v: View?) {
-            //TODO: Navigate to user detail screen.
+            val intent = Intent(mContext, UserDetailsActivity::class.java)
+            intent.putExtra(MESSAGES_DATA, usersDataList[adapterPosition].messagesList)
+            mContext.startActivity(intent)
         }
 
 

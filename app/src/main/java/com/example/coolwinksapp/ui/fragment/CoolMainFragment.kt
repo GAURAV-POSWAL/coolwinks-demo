@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coolwinksapp.R
 import com.example.coolwinksapp.base.MyApplication
 import com.example.coolwinksapp.model.CoolViewDataResponse
-import com.example.coolwinksapp.ui.adapter.RecyclerAdapter
+import com.example.coolwinksapp.ui.adapter.UsersListAdapter
 import com.example.coolwinksapp.utils.Utils
 import com.example.coolwinksapp.viewmodel.CoolViewModel
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -27,7 +27,7 @@ class CoolMainFragment : Fragment() {
      */
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var usersListAdapter: UsersListAdapter
 
 
     companion object {
@@ -53,7 +53,6 @@ class CoolMainFragment : Fragment() {
                 showLoader(true)
                 getCoolApiData()
             } else {
-                coolViewModel.setUsersData(this)
                 populateNewsList(this)
             }
         }
@@ -75,13 +74,13 @@ class CoolMainFragment : Fragment() {
     private fun setupRecyclerView() {
 
         val linearLayoutManager = LinearLayoutManager(context)
-        rvUsersMessages.layoutManager = linearLayoutManager
-        recyclerAdapter = RecyclerAdapter(context!!)
-        rvUsersMessages.adapter = recyclerAdapter
+        rvUsers.layoutManager = linearLayoutManager
+        usersListAdapter = UsersListAdapter(context!!)
+        rvUsers.adapter = usersListAdapter
         // for line separation between items
         val dividerItemDecoration =
-            DividerItemDecoration(rvUsersMessages.context, linearLayoutManager.orientation)
-        rvUsersMessages.addItemDecoration(dividerItemDecoration)
+            DividerItemDecoration(rvUsers.context, linearLayoutManager.orientation)
+        rvUsers.addItemDecoration(dividerItemDecoration)
     }
 
 
@@ -107,9 +106,9 @@ class CoolMainFragment : Fragment() {
     private fun populateNewsList(dataList: List<CoolViewDataResponse>?) {
         dataList?.let {
             if (it.isNotEmpty()) {
-                rvUsersMessages.visibility = View.VISIBLE
+                rvUsers.visibility = View.VISIBLE
                 tvNoData.visibility = View.GONE
-                recyclerAdapter.updateList(it)
+                usersListAdapter.updateList(it)
             } else {
                 showErrorMessage()
             }
@@ -117,7 +116,7 @@ class CoolMainFragment : Fragment() {
     }
 
     private fun showErrorMessage() {
-        rvUsersMessages.visibility = View.GONE
+        rvUsers.visibility = View.GONE
         tvNoData.visibility = View.VISIBLE
     }
 
